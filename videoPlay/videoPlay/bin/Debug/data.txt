@@ -1,0 +1,20 @@
+[
+  {
+    "Number": "1",
+    "StartDate": "2024-01-17",
+    "StartTime": "09:08",
+    "EndDate": "2024-01-19",
+    "EndTime": "08:08",
+    "FilePath": "Z:\\김미르\\2023\\3.jpg",
+    "FileType": 0
+  },
+  {
+    "Number": "2",
+    "StartDate": "2024-01-17",
+    "StartTime": "09:08",
+    "EndDate": "2024-01-19",
+    "EndTime": "08:08",
+    "FilePath": "Z:\\김미르\\2023\\PLS 홍보영상 (15초 ver).mp4",
+    "FileType": 1
+  }
+]
