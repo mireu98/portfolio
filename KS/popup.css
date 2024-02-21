@@ -1,0 +1,17 @@
+
+#popup{
+    text-align: center;
+    position: fixed;
+    width: 500px;
+    height: 300px;
+    
+    left: 700px;
+    z-index: 2;
+    background-color: gray;
+}
+#x{
+    position: relative;
+    top: 5px;
+    left: 230px;
+    cursor: pointer;
+}

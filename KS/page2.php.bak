@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>2</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        tr{
+        	height:50px;
+        }   
+        #topbar1{
+            width: 311px;
+            height: 47px;
+            position: relative;
+            top: 105px;
+            left: 164px;
+            background: none;
+        }
+        #topbar2{
+            width: 311px;
+            height: 47px;
+            position: relative;
+            top: 105px;
+            left: 313px;
+            background: none;
+        }
+        #topbar3{
+            width: 311px;
+            height: 47px;
+            position: relative;
+            top: 105px;
+            left: 464.5px;
+            background: none;
+        }
+        #topbar4{
+            width: 311px;
+            height: 47px;
+            position: relative;
+            top: 105px;
+            left: 614px;
+            background: none;
+        }
+        input{
+        	text-align:center;
+        }
+        
+        #btable{
+            background-color: white;
+            width:100%;
+            border-collapse: collapse;
+        }
+        td{
+            border: 1px solid black;
+        }
+        .table-container {
+				    text-align: center;
+            position: relative;
+            top: 207px;
+            width: 1860px;
+            height: 800px;
+            background-color: white;
+            margin: auto;
+            text-align: center;
+            border: 1px solid black;
+            overflow: auto;
+				}
+    </style>
+    <script src="popup.js"></script>
+
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div id="makenowPage" style="background:url(makenow.jpg); width: 1920px; height: 1080px;">
+        <!--팝업창-->
+        <div id="popupbtn"></div>
+        <div id="popup" style="display: none;">
+            <span id="x">X</span>
+            <br>
+            <br>
+            <div id="popinput">
+                <label for="ip">I&nbsp;&nbsp;&nbsp;&nbsp;P :</label>
+                <input type="text" id="ip" value="<?php echo $ip ?>">
+                <br>
+                <br>
+                <br>
+                <label for="pgselect">PAGE :</label>
+                <select id="pgselect">
+                    <option value="1">생산모니터링</option>
+                    <option value="2">생산현황</option>
+                    <option value="3">보드투입</option>
+                    <option value="4">스테커</option>
+                </select>
+                <br>
+                <br>
+                <br>
+                <button type="button" id="ok">OK</button>
+            </div>
+        </div>
+        <!--사업장~생산속도-->
+        <input type="text" id="topbar1" value="<?php echo $cname ?>" readonly>
+        <input type="text" id="topbar2" value="<?php echo $cline ?>" readonly>
+        <input type="text" id="topbar3" readonly>
+    
+        <input type="text" id="topbar4" value="<?php echo $cspeed ?>" readonly>
+				<div class="table-container">
+        <table class="table" id="btable">
+            <colgroup>
+                <col width="6.3%;">
+                <col width="16.4%;">
+                <col width="8.3%;">
+                <col width="6.3%;">
+                <col width="6.3%;">
+                <col width="6.7%;">
+                <col width="6.5%;">
+                <col width="12.7%;">
+                <col width="9.7%;">
+                <col width="9.7%;">
+                <col width="20%;">
+                <col width="0%;">
+            </colgroup>
+            <tbody id="tbody">
+               
+            </tbody>
+        </table>
+      </div>
+  <script>
+    let seconds = 0;
+    let minutes = 0;
+    let previousNumTa;
+
+    function updateTimer() {
+        seconds++;
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+
+        const displayMinutes = minutes < 10 ? "0" + minutes : minutes;
+        const displaySeconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $("#topbar3").val(displayMinutes + ":" + displaySeconds);
+    }
+
+    function loadTableData() {
+        const $tbody = $('#btable');
+        $tbody.empty();
+        $.ajax({
+            url: 'table3.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function(index, item) {
+                    var row = `
+                        <tr>
+                            <td>${item.num_ta}</td>
+                            <td>${item.comp_name}</td>
+                            <td>${item.comp_code}</td>
+                            <td>${item.inser_num}</td>
+                            <td>${item.col_num}</td>
+                            <td>${item.jepum_dug}</td>
+                            <td>${item.jepum_len}</td>
+                            <td>${item.jepum_num}</td>
+                            <td>${item.seang_num}</td>
+                            <td>${item.seang_len}</td>
+                            <td>${item.snote}</td>
+                        </tr>
+                    `;
+                    $tbody.append(row);
+                });
+            }
+        });
+    }
+
+    function getdata() {
+        $.ajax({
+            url: 'startData.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#topbar1').val(data.cname);
+                $('#topbar2').val(data.cline);
+                
+                $('#topbar4').val(data.cspeed);  
+                $('#ip').val(data.ip);     
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        loadTableData();
+        getdata();
+        setInterval(getdata, 1000);
+        setInterval(updateTimer, 1000);
+    });
+</script>
+
+
+    </div>
+</body>
+</html>
